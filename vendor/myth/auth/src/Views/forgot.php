@@ -1,4 +1,3 @@
-forgot.php
 
 <?= $this->extend($config->viewLayout) ?>
 <?= $this->section('main') ?>
@@ -7,6 +6,8 @@ forgot.php
     body {
         background: #0a3d35;
         font-family: 'Poppins', sans-serif;
+        margin: 0;
+        padding: 0;
     }
 
     .forgot-container {
@@ -14,6 +15,7 @@ forgot.php
         justify-content: center;
         align-items: center;
         min-height: 100vh;
+        padding: 20px;
     }
 
     .forgot-box {
@@ -22,11 +24,13 @@ forgot.php
         border-radius: 12px;
         overflow: hidden;
         width: 850px;
-        max-width: 95%;
+        max-width: 100%;
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        position: relative;
+        transition: all 0.3s ease;
     }
 
-    /* KIRI */
+    /* Bagian kiri */
     .forgot-left {
         background: #e5e5e5;
         width: 50%;
@@ -48,7 +52,6 @@ forgot.php
         border-bottom-right-radius: 60px;
     }
 
-    /* Segitiga hijau di bawah logo (menghadap ke atas) */
     .forgot-left::after {
         content: "";
         position: absolute;
@@ -62,7 +65,7 @@ forgot.php
 
     .forgot-left h2 {
         position: relative;
-        margin-top: 70px;
+        margin-top: 60px;
         color: white;
         font-weight: 700;
     }
@@ -73,37 +76,37 @@ forgot.php
         margin-top: -5px;
     }
 
+    /* 🔹 LOGO AREA 🔹 */
     .forgot-left .logo {
         position: relative;
-        transform: translateY(-30px);
+        transition: transform 0.3s ease;
     }
 
     .forgot-left img {
         width: 120px;
-        margin-top: 20px;
+        margin-top: 15px;
         z-index: 2;
         position: relative;
     }
 
-    /* KANAN */
+    /* Bagian kanan */
     .forgot-right {
         background: linear-gradient(to bottom right, #007b66, #009e7f);
         width: 50%;
         display: flex;
         flex-direction: column;
-        justify-content: center;
         align-items: center;
-        padding: 30px;
+        position: relative;
+        padding: 40px 30px;
     }
 
-    /* Tulisan di luar card */
     .forgot-header {
         color: white;
         font-weight: 700;
         font-size: 26px;
         letter-spacing: 1px;
-        margin-top: 10px;
-        margin-bottom: 20px;
+        margin-top: 20px;
+        margin-bottom: 15px;
         text-align: center;
     }
 
@@ -113,19 +116,13 @@ forgot.php
         padding: 30px 40px;
         width: 100%;
         max-width: 350px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         text-align: center;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
 
     .forgot-form img {
         width: 60px;
         margin-bottom: 10px;
-    }
-
-    .forgot-form p {
-        font-size: 14px;
-        color: #333;
-        margin-bottom: 20px;
     }
 
     .form-control {
@@ -163,6 +160,81 @@ forgot.php
     .small-links {
         margin-top: 10px;
     }
+
+    /* ==========================
+       🔹 RESPONSIVE AREA 🔹
+       ========================== */
+
+    /* Default (desktop/web) */
+    .forgot-left .logo {
+        transform: translateY(-10px); /* logo agak ke bawah di layar besar */
+    }
+
+    /* Tablet */
+    @media (max-width: 1024px) {
+        
+        .forgot-left .logo {
+            transform: translateY(30px); /* naik sedikit di tablet */
+        }
+
+        .forgot-left h2 {
+            margin-top: 15px;
+        }
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+        .forgot-box {
+            flex-direction: column;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .forgot-left,
+        .forgot-right {
+            width: 100%;
+        }
+
+        .forgot-left {
+            padding: 30px 20px 60px;
+        }
+
+        .forgot-left::after {
+            display: none; /* hilangkan segitiga di mobile */
+        }
+
+        .forgot-left .logo {
+            transform: translateY(30px); /* naik lebih tinggi di mobile */
+        }
+
+        .forgot-left h2 {
+            font-size: 20px;
+        }
+
+        .forgot-left img {
+            width: 100px;
+            margin-top: 25px;
+        }
+
+        .forgot-form {
+            margin-top: 10px;
+            padding: 25px 30px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .forgot-left p {
+            font-size: 12px;
+        }
+
+        .btn-forgot {
+            font-size: 14px;
+        }
+
+        .forgot-form {
+            padding: 20px;
+        }
+    }
 </style>
 
 <div class="forgot-container">
@@ -174,7 +246,7 @@ forgot.php
                 <h2>SIMAJA</h2>
                 <p>Sistem Manajemen Study Jam</p>
                 <h4 style="color: black; font-weight: 700;">PROTIC</h4>
-                <img src="<?= base_url('assets/images/logo.png') ?>" alt="Logo">
+                <img src="<?= base_url('img/protic.png') ?>" alt="Logo">
             </div>
         </div>
 
@@ -184,7 +256,7 @@ forgot.php
             <div class="forgot-header">FORGOT PASSWORD</div>
 
             <div class="forgot-form">
-                <img src="<?= base_url('assets/images/logo.png') ?>" alt="Logo kecil">
+                <img src="<?= base_url('img/protic.png') ?>" alt="Logo kecil">
 
                 <?= view('Myth\Auth\Views\_message_block') ?>
 
@@ -202,7 +274,7 @@ forgot.php
                 </form>
 
                 <div class="small-links">
-                    <p><a href="<?= url_to('login') ?>">Back to Login</a></p>
+                    <p><a href="<?= url_to('login') ?>">Back to login</a></p>
                 </div>
             </div>
         </div>

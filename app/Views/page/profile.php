@@ -4,14 +4,11 @@
 <style>
     .bg-custom-teal {
         background-color: #004d40;
-        /* Warna hijau tua sesuai gambar */
         padding-bottom: 100px;
-        /* Memberi ruang untuk efek overlap */
     }
 
     .profile-overlap {
         margin-top: -80px;
-        /* Efek kartu naik ke atas header */
     }
 
     .info-box {
@@ -68,12 +65,18 @@
         <div class="col-md-8">
             <div class="card border-0 shadow-sm rounded-4 text-center py-4">
                 <div class="card-body">
-                    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Foto Profil"
-                        class="rounded-circle mb-3 shadow-sm"
+                    <!-- FOTO PROFIL -->
+                    <?php
+                    $foto = $profile['foto'] ?? 'default.png';
+                    // Cek apakah foto url luar atau lokal
+                    $fotoUrl = (filter_var($foto, FILTER_VALIDATE_URL)) ? $foto : base_url('img/' . $foto);
+                    ?>
+                    <img src="<?= $fotoUrl; ?>" alt="Foto Profil" class="rounded-circle mb-3 shadow-sm"
                         style="width: 100px; height: 100px; object-fit: cover; border: 3px solid white;">
 
-                    <h4 class="fw-bold mb-1">Nazril Andhika Aulia</h4>
-                    <p class="text-muted small mb-0">NIM: 24030023</p>
+                    <!-- NAMA & NIM DINAMIS -->
+                    <h4 class="fw-bold mb-1"><?= esc($profile['nama_lengkap'] ?? user()->username); ?></h4>
+                    <p class="text-muted small mb-0">NIM: <?= esc($profile['nim'] ?? '-'); ?></p>
                 </div>
             </div>
         </div>
@@ -85,34 +88,36 @@
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <h5 class="fw-bold mb-0">Informasi Profil</h5>
-                        <a href="/profile/edit" class="text-dark">
+                        <!-- UBAH HREF DI SINI -->
+                        <a href="<?= base_url('/profile/edit'); ?>" class="text-dark" title="Edit Profil">
                             <i class="bi bi-pencil-square fs-5"></i>
                         </a>
                     </div>
 
+                    <!-- DATA DINAMIS -->
                     <div class="info-box">
                         <span class="info-label">Kelas</span>
-                        <span class="info-value">2A</span>
+                        <span class="info-value"><?= esc($profile['kelas'] ?? '-'); ?></span>
                     </div>
                     <div class="info-box">
                         <span class="info-label">Prodi</span>
-                        <span class="info-value">Teknik Informatika</span>
+                        <span class="info-value"><?= esc($profile['prodi'] ?? '-'); ?></span>
                     </div>
                     <div class="info-box">
                         <span class="info-label">Jurusan</span>
-                        <span class="info-value">Komputer & Bisnis</span>
+                        <span class="info-value"><?= esc($profile['jurusan'] ?? '-'); ?></span>
                     </div>
                     <div class="info-box">
                         <span class="info-label">Semester</span>
-                        <span class="info-value">3 (Tiga)</span>
+                        <span class="info-value"><?= esc($profile['semester'] ?? '-'); ?></span>
                     </div>
                     <div class="info-box">
                         <span class="info-label">Jenis Kelamin</span>
-                        <span class="info-value">Perempuan</span>
+                        <span class="info-value"><?= esc($profile['jenis_kelamin'] ?? '-'); ?></span>
                     </div>
                     <div class="info-box mb-0">
                         <span class="info-label">Alamat</span>
-                        <span class="info-value text-end">Jl. Flores, Sidanegara, Cilacap</span>
+                        <span class="info-value text-end"><?= esc($profile['alamat'] ?? '-'); ?></span>
                     </div>
                 </div>
             </div>
@@ -122,12 +127,13 @@
     <div class="row justify-content-center g-3">
         <div class="col-md-8">
             <div class="row g-3">
+                <!-- STATISTIK DINAMIS -->
                 <div class="col-6">
                     <div class="stat-card">
                         <div class="d-flex align-items-center">
                             <i class="bi bi-trophy stat-icon"></i>
                             <div class="text-start">
-                                <h4 class="fw-bold mb-0">1980</h4>
+                                <h4 class="fw-bold mb-0"><?= $stats['poin']; ?></h4>
                                 <small class="fw-bold text-dark">Total Poin</small>
                             </div>
                         </div>
@@ -139,7 +145,7 @@
                         <div class="d-flex align-items-center">
                             <i class="bi bi-clock stat-icon"></i>
                             <div class="text-start">
-                                <h4 class="fw-bold mb-0">105</h4>
+                                <h4 class="fw-bold mb-0"><?= $stats['jam']; ?></h4>
                                 <small class="fw-bold text-dark">Jam Belajar</small>
                             </div>
                         </div>
@@ -151,7 +157,7 @@
                         <div class="d-flex align-items-center">
                             <i class="bi bi-book stat-icon"></i>
                             <div class="text-start">
-                                <h4 class="fw-bold mb-0">8</h4>
+                                <h4 class="fw-bold mb-0"><?= $stats['selesai']; ?></h4>
                                 <small class="fw-bold text-dark">Materi Selesai</small>
                             </div>
                         </div>
@@ -163,7 +169,7 @@
                         <div class="d-flex align-items-center">
                             <i class="bi bi-star stat-icon"></i>
                             <div class="text-start">
-                                <h4 class="fw-bold mb-0">#4</h4>
+                                <h4 class="fw-bold mb-0">#<?= $stats['ranking']; ?></h4>
                                 <small class="fw-bold text-dark">Ranking</small>
                             </div>
                         </div>
@@ -178,7 +184,6 @@
             <i class="bi bi-box-arrow-right me-1"></i> Logout
         </a>
     </div>
-
 
 </div>
 

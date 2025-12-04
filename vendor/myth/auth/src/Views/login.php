@@ -1,19 +1,13 @@
-login.php
 
 <?= $this->extend($config->viewLayout) ?>
 <?= $this->section('main') ?>
-
-<?php if (session()->getFlashdata('pesan')) : ?>
-  <div class="alert alert-success text-center">
-    <?= session()->getFlashdata('pesan'); ?>
-  </div>
-<?php endif; ?>
-
 
 <style>
     body {
         background: #0a3d35;
         font-family: 'Poppins', sans-serif;
+        margin: 0;
+        padding: 0;
     }
 
     .login-container {
@@ -21,6 +15,7 @@ login.php
         justify-content: center;
         align-items: center;
         min-height: 100vh;
+        padding: 20px;
     }
 
     .login-box {
@@ -29,9 +24,10 @@ login.php
         border-radius: 12px;
         overflow: hidden;
         width: 850px;
-        max-width: 95%;
+        max-width: 100%;
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
         position: relative;
+        transition: all 0.3s ease;
     }
 
     /* Bagian kiri */
@@ -44,7 +40,6 @@ login.php
         overflow: hidden;
     }
 
-    /* Lengkungan atas */
     .login-left::before {
         content: "";
         position: absolute;
@@ -57,7 +52,6 @@ login.php
         border-bottom-right-radius: 60px;
     }
 
-    /* Segitiga bawah */
     .login-left::after {
         content: "";
         position: absolute;
@@ -82,9 +76,10 @@ login.php
         margin-top: -5px;
     }
 
+    /* 🔹 LOGO AREA 🔹 */
     .login-left .logo {
         position: relative;
-        transform: translateY(-30px);
+        transition: transform 0.3s ease;
     }
 
     .login-left img {
@@ -102,10 +97,9 @@ login.php
         flex-direction: column;
         align-items: center;
         position: relative;
-        padding: 40px;
+        padding: 40px 30px;
     }
 
-    /* Tulisan LOGIN di luar card */
     .login-header {
         color: white;
         font-weight: 700;
@@ -116,7 +110,6 @@ login.php
         text-align: center;
     }
 
-    /* Kotak form */
     .login-form {
         background: #f0f0f0;
         border-radius: 10px;
@@ -167,6 +160,81 @@ login.php
     .small-links {
         margin-top: 10px;
     }
+
+    /* ==========================
+       🔹 RESPONSIVE AREA 🔹
+       ========================== */
+
+    /* Default (desktop/web) */
+    .login-left .logo {
+        transform: translateY(-10px); /* logo agak ke bawah di layar besar */
+    }
+
+    /* Tablet */
+    @media (max-width: 1024px) {
+        
+        .login-left .logo {
+            transform: translateY(30px); /* naik sedikit di tablet */
+        }
+
+        .login-left h2 {
+            margin-top: 15px;
+        }
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+        .login-box {
+            flex-direction: column;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .login-left,
+        .login-right {
+            width: 100%;
+        }
+
+        .login-left {
+            padding: 30px 20px 60px;
+        }
+
+        .login-left::after {
+            display: none; /* hilangkan segitiga di mobile */
+        }
+
+        .login-left .logo {
+            transform: translateY(30px); /* naik lebih tinggi di mobile */
+        }
+
+        .login-left h2 {
+            font-size: 20px;
+        }
+
+        .login-left img {
+            width: 100px;
+            margin-top: 25px;
+        }
+
+        .login-form {
+            margin-top: 10px;
+            padding: 25px 30px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .login-left p {
+            font-size: 12px;
+        }
+
+        .btn-login {
+            font-size: 14px;
+        }
+
+        .login-form {
+            padding: 20px;
+        }
+    }
 </style>
 
 <div class="login-container">
@@ -184,10 +252,8 @@ login.php
 
         <!-- Bagian kanan -->
         <div class="login-right">
-            <!-- Tulisan LOGIN di atas card -->
             <div class="login-header">LOGIN</div>
 
-            <!-- Form box -->
             <div class="login-form">
                 <img src="<?= base_url('img/protic.png') ?>" alt="Logo kecil">
 
@@ -196,12 +262,16 @@ login.php
                 <form action="<?= url_to('login') ?>" method="post">
                     <?= csrf_field() ?>
 
-                    <input type="text" name="login" class="form-control <?php if (session('errors.login')) : ?>is-invalid<?php endif ?>" placeholder="Email/Username">
+                    <input type="text" name="login"
+                        class="form-control <?php if (session('errors.login')) : ?>is-invalid<?php endif ?>"
+                        placeholder="Email/Username">
                     <div class="invalid-feedback">
                         <?= session('errors.login') ?>
                     </div>
 
-                    <input type="password" name="password" class="form-control <?php if (session('errors.password')) : ?>is-invalid<?php endif ?>" placeholder="Password">
+                    <input type="password" name="password"
+                        class="form-control <?php if (session('errors.password')) : ?>is-invalid<?php endif ?>"
+                        placeholder="Password">
                     <div class="invalid-feedback">
                         <?= session('errors.password') ?>
                     </div>

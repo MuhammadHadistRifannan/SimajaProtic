@@ -15,7 +15,7 @@ use CodeIgniter\Filters\SecureHeaders;
 use Myth\Auth\Filters\PermissionFilter;
 use App\Filters\LoginFilter;
 use App\Filters\RoleFilter;
-
+use Myth\Auth\Filters\RoleFilter as FiltersRoleFilter;
 
 class Filters extends BaseFilters
 {
@@ -39,7 +39,7 @@ class Filters extends BaseFilters
         'pagecache' => PageCache::class,
         'performance' => PerformanceMetrics::class,
         'login' => \Myth\Auth\Filters\LoginFilter::class,
-        'role' => RoleFilter::class,
+        'role' => FiltersRoleFilter::class,
         'permission' => PermissionFilter::class
     ];
 

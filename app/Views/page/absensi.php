@@ -3,7 +3,6 @@
 
 <!-- HERO SECTION -->
 <div class="container-fluid py-5 text-center text-white" style="background: linear-gradient(180deg, #004d40, #00796b);">
-
     <h1 class="fw-bold display-5 mb-2">Absensi Study Jam</h1>
     <p class="mb-0">
         Catat kehadiranmu dan tunjukkan semangat belajarmu di setiap sesi.<br>
@@ -16,15 +15,36 @@
   <div class="card border-0 shadow-lg mx-auto p-4 rounded-4" style="max-width: 500px; border-radius: 25px;">
     <div class="card-body">
 
-      <h4 class="text-center fw-bold text-success mb-4">WEB BASIC</h4>
+      <!-- JUDUL KELAS DINAMIS (Diambil dari controller) -->
+      <h4 class="text-center fw-bold text-success mb-2"><?= esc($jadwal['judul']); ?></h4>
+      <p class="text-center text-muted small mb-4">
+        <?= date('d F Y', strtotime($jadwal['tanggal'])); ?> | 
+        <?= date('H.i', strtotime($jadwal['waktu_mulai'])); ?> WIB
+      </p>
 
-      <?php if (session()->getFlashdata('pesan')) : ?>
-        <div class="alert alert-success text-center fw-semibold rounded-pill py-2" role="alert">
-          <?= session()->getFlashdata('pesan'); ?>
+      <?php if (session()->getFlashdata('error')) : ?>
+        <div class="alert alert-danger text-center fw-semibold py-2" role="alert">
+          <?= session()->getFlashdata('error'); ?>
         </div>
       <?php endif; ?>
 
-      <form action="<?= base_url('absensi/kirim'); ?>" method="post">
+      <?php if ($sudah_absen) : ?>
+        <!-- TAMPILAN JIKA SUDAH ABSEN -->
+        <div class="text-center py-4">
+            <i class="bi bi-check-circle-fill text-success display-1"></i>
+            <h5 class="mt-3">Anda sudah mengisi absensi.</h5>
+            <p class="text-muted">Status: <strong><?= $sudah_absen['status']; ?></strong></p>
+            <a href="<?= base_url('jadwal'); ?>" class="btn btn-outline-success mt-2">Kembali ke Jadwal</a>
+        </div>
+
+      <?php else : ?>
+        <!-- FORM ABSENSI -->
+        <form action="<?= base_url('absensi/kirim'); ?>" method="post">
+        <?= csrf_field(); ?>
+        
+        <!-- Input Hidden untuk ID Jadwal -->
+        <input type="hidden" name="jadwal_id" value="<?= $jadwal['id']; ?>">
+
         <div class="mb-3">
           <label class="form-label fw-semibold text-dark mb-2">Keterangan Peserta</label>
 
@@ -51,6 +71,7 @@
           </button>
         </div>
       </form>
+      <?php endif; ?>
 
     </div>
   </div>

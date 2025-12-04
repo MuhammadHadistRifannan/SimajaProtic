@@ -9,11 +9,11 @@
 
         <!-- Ikon Sosial -->
         <div class="d-flex gap-3">
-          <a href="#" class="text-white fs-5"><i class="bi bi-instagram"></i></a>
-          <a href="#" class="text-white fs-5"><i class="bi bi-github"></i></a>
-          <a href="#" class="text-white fs-5"><i class="bi bi-linkedin"></i></a>
-          <a href="#" class="text-white fs-5"><i class="bi bi-tiktok"></i></a>
-          <a href="#" class="text-white fs-5"><i class="bi bi-facebook"></i></a>
+          <a href="https://www.instagram.com/protic_pnc?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==/" class="text-white fs-5"><i class="bi bi-instagram"></i></a>
+          <a href="https://github.com/Protic-PNC" class="text-white fs-5"><i class="bi bi-github"></i></a>
+          <a href="https://www.linkedin.com/company/proticpnc/" class="text-white fs-5"><i class="bi bi-linkedin"></i></a>
+          <a href="https://www.tiktok.com/@proticpnc?_r=1&_t=ZS-91tw8hqaxUN" class="text-white fs-5"><i class="bi bi-tiktok"></i></a>
+          <a href="https://www.facebook.com/share/179R6HXS4C/" class="text-white fs-5"><i class="bi bi-facebook"></i></a>
         </div>
       </div>
 

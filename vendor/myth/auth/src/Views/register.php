@@ -1,4 +1,3 @@
-register.php
 
 <?= $this->extend($config->viewLayout) ?>
 <?= $this->section('main') ?>
@@ -7,6 +6,8 @@ register.php
     body {
         background: #0a3d35;
         font-family: 'Poppins', sans-serif;
+        margin: 0;
+        padding: 0;
     }
 
     .register-container {
@@ -14,6 +15,7 @@ register.php
         justify-content: center;
         align-items: center;
         min-height: 100vh;
+        padding: 20px;
     }
 
     .register-box {
@@ -22,8 +24,10 @@ register.php
         border-radius: 12px;
         overflow: hidden;
         width: 850px;
-        max-width: 95%;
+        max-width: 100%;
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        position: relative;
+        transition: all 0.3s ease;
     }
 
     /* Bagian kiri */
@@ -61,7 +65,7 @@ register.php
 
     .register-left h2 {
         position: relative;
-        margin-top: 70px;
+        margin-top: 60px;
         color: white;
         font-weight: 700;
     }
@@ -72,14 +76,15 @@ register.php
         margin-top: -5px;
     }
 
+    /* 🔹 LOGO AREA 🔹 */
     .register-left .logo {
         position: relative;
-        transform: translateY(-30px);
+        transition: transform 0.3s ease;
     }
 
     .register-left img {
         width: 120px;
-        margin-top: 20px;
+        margin-top: 15px;
         z-index: 2;
         position: relative;
     }
@@ -90,19 +95,18 @@ register.php
         width: 50%;
         display: flex;
         flex-direction: column;
-        justify-content: center;
         align-items: center;
-        padding: 30px;
+        position: relative;
+        padding: 40px 30px;
     }
 
-    /* Judul di luar card */
     .register-header {
         color: white;
         font-weight: 700;
         font-size: 26px;
         letter-spacing: 1px;
-        margin-top: 10px;
-        margin-bottom: 20px;
+        margin-top: 20px;
+        margin-bottom: 15px;
         text-align: center;
     }
 
@@ -112,8 +116,8 @@ register.php
         padding: 30px 40px;
         width: 100%;
         max-width: 350px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         text-align: center;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
 
     .register-form img {
@@ -156,12 +160,87 @@ register.php
     .small-links {
         margin-top: 10px;
     }
+
+    /* ==========================
+       🔹 RESPONSIVE AREA 🔹
+       ========================== */
+
+    /* Default (desktop/web) */
+    .register-left .logo {
+        transform: translateY(-10px); /* logo agak ke bawah di layar besar */
+    }
+
+    /* Tablet */
+    @media (max-width: 1024px) {
+        
+        .register-left .logo {
+            transform: translateY(30px); /* naik sedikit di tablet */
+        }
+
+        .register-left h2 {
+            margin-top: 15px;
+        }
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+        .register-box {
+            flex-direction: column;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .register-left,
+        .register-right {
+            width: 100%;
+        }
+
+        .register-left {
+            padding: 30px 20px 60px;
+        }
+
+        .register-left::after {
+            display: none; /* hilangkan segitiga di mobile */
+        }
+
+        .register-left .logo {
+            transform: translateY(30px); /* naik lebih tinggi di mobile */
+        }
+
+        .register-left h2 {
+            font-size: 20px;
+        }
+
+        .register-left img {
+            width: 100px;
+            margin-top: 25px;
+        }
+
+        .register-form {
+            margin-top: 10px;
+            padding: 25px 30px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .register-left p {
+            font-size: 12px;
+        }
+
+        .btn-register {
+            font-size: 14px;
+        }
+
+        .register-form {
+            padding: 20px;
+        }
+    }
 </style>
 
 <div class="register-container">
     <div class="register-box">
 
-        <!-- Kiri -->
+        <!-- Bagian kiri -->
         <div class="register-left">
             <div class="logo">
                 <h2>SIMAJA</h2>
@@ -171,9 +250,8 @@ register.php
             </div>
         </div>
 
-        <!-- Kanan -->
+        <!-- Bagian kanan -->
         <div class="register-right">
-            <!-- Tulisan di luar card -->
             <div class="register-header">REGISTER</div>
 
             <div class="register-form">

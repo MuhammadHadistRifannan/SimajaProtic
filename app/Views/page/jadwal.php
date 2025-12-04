@@ -8,108 +8,109 @@
   </p>
 </div>
 
+<!-- FLASH MESSAGE (Pesan Sukses/Gagal) -->
+<div class="container mt-4">
+  <?php if (session()->getFlashdata('pesan')): ?>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      <i class="bi bi-check-circle-fill me-2"></i><?= session()->getFlashdata('pesan'); ?>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <?php endif; ?>
+
+  <?php if (session()->getFlashdata('error')): ?>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <i class="bi bi-exclamation-triangle-fill me-2"></i><?= session()->getFlashdata('error'); ?>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <?php endif; ?>
+
+  <?php if (session()->getFlashdata('warning')): ?>
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+      <i class="bi bi-info-circle-fill me-2"></i><?= session()->getFlashdata('warning'); ?>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <?php endif; ?>
+</div>
+
 <!-- LIST JADWAL -->
 <div class="container my-5">
   <div class="row justify-content-center">
 
-    <!-- CARD 1 -->
-    <div class="col-md-8 mb-4">
-      <div class="card shadow-sm border-2 rounded-4 p-3 d-flex flex-row justify-content-between align-items-center">
-        <div>
-          <h6 class="fw-bold mb-1">UI/UX Design</h6>
-          <p class="text-muted small mb-2">Introduction UI/UX with Figma</p>
-          <div class="d-flex flex-wrap small text-muted">
-            <div class="me-3"><i class="bi bi-calendar-event me-1"></i>Senin, 1 Mei 2025</div>
-            <div class="me-3"><i class="bi bi-clock me-1"></i>16.00 - selesai</div>
-            <div><i class="bi bi-people me-1"></i>32 Peserta</div>
-          </div>
-        </div>
-        <button class="btn text-white fw-semibold w-20" style="background: linear-gradient(90deg,#004d40,#00796b);">Daftar</button>
+    <?php if (empty($jadwal)): ?>
+      <div class="col-12 text-center py-5">
+        <div class="text-muted display-1 mb-3"><i class="bi bi-calendar-x"></i></div>
+        <h4 class="text-muted">Belum ada jadwal tersedia saat ini.</h4>
       </div>
-    </div>
+    <?php else: ?>
 
-    <!-- CARD 2 -->
-    <div class="col-md-8 mb-4">
-      <div class="card shadow-sm border-2 rounded-4 p-3 d-flex flex-row justify-content-between align-items-center">
-        <div>
-          <h6 class="fw-bold mb-1">WEB Basic</h6>
-          <p class="text-muted small mb-2">Introduction HTML</p>
-          <div class="d-flex flex-wrap small text-muted">
-            <div class="me-3"><i class="bi bi-calendar-event me-1"></i>Selasa, 2 Mei 2025</div>
-            <div class="me-3"><i class="bi bi-clock me-1"></i>16.00 - selesai</div>
-            <div><i class="bi bi-people me-1"></i>29 Peserta</div>
-          </div>
-        </div>
-        <div>
-          <button class="btn btn-outline-success mb-2 w-100">Sudah Terdaftar</button><br>
-          <a href="<?= base_url('absensi'); ?>" class="btn text-white fw-semibold w-100" style="background: linear-gradient(90deg,#004d40,#00796b);">Absen</a>
-        </div>
-      </div>
-    </div>
+      <?php foreach ($jadwal as $item): ?>
+        <!-- START LOOP CARD -->
+        <div class="col-md-8 mb-4">
+          <div class="card shadow-sm border-2 rounded-4 p-3 d-flex flex-row justify-content-between align-items-center">
 
-    <!-- CARD 3 -->
-    <div class="col-md-8 mb-4">
-      <div class="card shadow-sm border-2 rounded-4 p-3 d-flex flex-row justify-content-between align-items-center">
-        <div>
-          <h6 class="fw-bold mb-1">WEB Advance</h6>
-          <p class="text-muted small mb-2">Introduction Framework</p>
-          <div class="d-flex flex-wrap small text-muted">
-            <div class="me-3"><i class="bi bi-calendar-event me-1"></i>Rabu, 3 Mei 2025</div>
-            <div class="me-3"><i class="bi bi-clock me-1"></i>16.00 - selesai</div>
-            <div><i class="bi bi-people me-1"></i>29 Peserta</div>
-          </div>
-        </div>
-        <button class="btn text-white fw-semibold w-20" style="background: linear-gradient(90deg,#004d40,#00796b);">Daftar</button>
-      </div>
-    </div>
+            <!-- Info Jadwal -->
+            <div class="flex-grow-1 pe-3">
+              <h6 class="fw-bold mb-1 text-dark"><?= esc($item['judul']); ?></h6>
+              <p class="text-muted small mb-2"><?= esc($item['deskripsi']); ?></p>
 
-    <!-- CARD 4 -->
-    <div class="col-md-8 mb-4">
-      <div class="card shadow-sm border-2 rounded-4 p-3 d-flex flex-row justify-content-between align-items-center">
-        <div>
-          <h6 class="fw-bold mb-1">DevOps</h6>
-          <p class="text-muted small mb-2">Introduction DevOps</p>
-          <div class="d-flex flex-wrap small text-muted">
-            <div class="me-3"><i class="bi bi-calendar-event me-1"></i>Rabu, 3 Mei 2025</div>
-            <div class="me-3"><i class="bi bi-clock me-1"></i>16.00 - selesai</div>
-            <div><i class="bi bi-people me-1"></i>22 Peserta</div>
-          </div>
-        </div>
-        <button class="btn text-white fw-semibold w-20" style="background: linear-gradient(90deg,#004d40,#00796b);">Daftar</button>
-      </div>
-    </div>
+              <div class="d-flex flex-wrap small text-muted gap-3">
+                <div>
+                  <i class="bi bi-calendar-event me-1 text-success"></i>
+                  <?= date('d F Y', strtotime($item['tanggal'])); ?>
+                </div>
+                <div>
+                  <i class="bi bi-clock me-1 text-primary"></i>
+                  <?= date('H.i', strtotime($item['waktu_mulai'])); ?> -
+                  <?= date('H.i', strtotime($item['waktu_selesai'])); ?>
+                </div>
+                <div>
+                  <i class="bi bi-people me-1 text-warning"></i>
+                  <?= esc($item['terisi']); ?> / <?= esc($item['kuota']); ?> Peserta
+                </div>
+              </div>
+            </div>
 
-    <!-- CARD 5 -->
-    <div class="col-md-8 mb-4">
-      <div class="card shadow-sm border-2 rounded-4 p-3 d-flex flex-row justify-content-between align-items-center">
-        <div>
-          <h6 class="fw-bold mb-1">Data</h6>
-          <p class="text-muted small mb-2">Introduction Data</p>
-          <div class="d-flex flex-wrap small text-muted">
-            <div class="me-3"><i class="bi bi-calendar-event me-1"></i>Kamis, 4 Mei 2025</div>
-            <div class="me-3"><i class="bi bi-clock me-1"></i>16.00 - selesai</div>
-            <div><i class="bi bi-people me-1"></i>29 Peserta</div>
-          </div>
-        </div>
-        <button class="btn text-white fw-semibold w-20" style="background: linear-gradient(90deg,#004d40,#00796b);">Daftar</button>
-      </div>
-    </div>
+            <!-- Logic Tombol -->
+            <div style="min-width: 140px;">
+              <?php
+              // Cek apakah ID jadwal ini ada di array 'jadwal_saya' (dikirim dari Controller)
+              $isRegistered = in_array($item['id'], $jadwal_saya ?? []);
+              $isFull = $item['terisi'] >= $item['kuota'];
+              ?>
 
-    <!-- CARD 6 -->
-    <div class="col-md-8 mb-4">
-      <div class="card shadow-sm border-2 rounded-4 p-3 d-flex flex-row justify-content-between align-items-center">
-        <div>
-          <h6 class="fw-bold mb-1">Mobile</h6>
-          <p class="text-muted small mb-2">Introduction Mobile</p>
-          <div class="d-flex flex-wrap small text-muted">
-            <div class="me-3"><i class="bi bi-calendar-event me-1"></i>Kamis, 4 Mei 2025</div>
-            <div class="me-3"><i class="bi bi-clock me-1"></i>16.00 - selesai</div>
-            <div><i class="bi bi-people me-1"></i>48 Peserta</div>
+              <?php if ($isRegistered): ?>
+                <!-- Tombol: SUDAH TERDAFTAR -->
+                <button class="btn btn-secondary fw-semibold w-100 mb-2" disabled style="cursor: not-allowed; opacity: 0.8;">
+                  <i class="bi bi-check-lg"></i> Terdaftar
+                </button>
+                <a href="<?= base_url('absensi/' . $item['id']); ?>" class="btn btn-outline-success btn-sm w-100">
+                  Absen
+                </a>
+
+              <?php elseif ($isFull): ?>
+                <!-- Tombol: PENUH -->
+                <button class="btn btn-danger fw-semibold w-100" disabled style="cursor: not-allowed;">
+                  <i class="bi bi-x-circle"></i> Penuh
+                </button>
+
+              <?php else: ?>
+                <!-- Tombol: DAFTAR (Form POST) -->
+                <form action="<?= base_url('/jadwal/daftar/' . $item['id']); ?>" method="post">
+                  <?= csrf_field(); ?>
+                  <button type="submit" class="btn text-white fw-semibold w-100 shadow-sm"
+                    style="background: linear-gradient(90deg,#004d40,#00796b);">
+                    Daftar
+                  </button>
+                </form>
+              <?php endif; ?>
+            </div>
+
           </div>
         </div>
-        <button class="btn text-white fw-semibold w-20" style="background: linear-gradient(90deg,#004d40,#00796b);">Daftar</button>
-      </div>
-    </div>
+        <!-- END LOOP CARD -->
+      <?php endforeach; ?>
+
+    <?php endif; ?>
 
   </div>
 </div>
