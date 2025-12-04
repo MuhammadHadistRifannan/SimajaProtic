@@ -13,6 +13,7 @@ use function array_diff;
 use function array_merge;
 use function array_reverse;
 use function array_splice;
+use function assert;
 use function count;
 use function in_array;
 use function max;
@@ -25,7 +26,6 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\TestSuite;
 use PHPUnit\Runner\ResultCache\NullResultCache;
 use PHPUnit\Runner\ResultCache\ResultCache;
-use PHPUnit\Runner\ResultCache\ResultCacheId;
 
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
@@ -72,20 +72,10 @@ final class TestSuiteSorter
     ];
 
     /**
-     * @var array<string, int> Associative array of (string => DEFECT_SORT_WEIGHT) elements
+     * @psalm-var array<string, int> Associative array of (string => DEFECT_SORT_WEIGHT) elements
      */
     private array $defectSortOrder = [];
     private readonly ResultCache $cache;
-
-    /**
-     * @var array<string> A list of normalized names of tests before reordering
-     */
-    private array $originalExecutionOrder = [];
-
-    /**
-     * @var array<string> A list of normalized names of tests affected by reordering
-     */
-    private array $executionOrder = [];
 
     public function __construct(?ResultCache $cache = null)
     {
@@ -95,7 +85,7 @@ final class TestSuiteSorter
     /**
      * @throws Exception
      */
-    public function reorderTestsInSuite(Test $suite, int $order, bool $resolveDependencies, int $orderDefects, bool $isRootTestSuite = true): void
+    public function reorderTestsInSuite(Test $suite, int $order, bool $resolveDependencies, int $orderDefects): void
     {
         $allowedOrders = [
             self::ORDER_DEFAULT,
@@ -106,7 +96,9 @@ final class TestSuiteSorter
         ];
 
         if (!in_array($order, $allowedOrders, true)) {
+            // @codeCoverageIgnoreStart
             throw new InvalidOrderException;
+            // @codeCoverageIgnoreEnd
         }
 
         $allowedOrderDefects = [
@@ -115,16 +107,14 @@ final class TestSuiteSorter
         ];
 
         if (!in_array($orderDefects, $allowedOrderDefects, true)) {
+            // @codeCoverageIgnoreStart
             throw new InvalidOrderException;
-        }
-
-        if ($isRootTestSuite) {
-            $this->originalExecutionOrder = $this->calculateTestExecutionOrder($suite);
+            // @codeCoverageIgnoreEnd
         }
 
         if ($suite instanceof TestSuite) {
             foreach ($suite as $_suite) {
-                $this->reorderTestsInSuite($_suite, $order, $resolveDependencies, $orderDefects, false);
+                $this->reorderTestsInSuite($_suite, $order, $resolveDependencies, $orderDefects);
             }
 
             if ($orderDefects === self::ORDER_DEFECTS_FIRST) {
@@ -133,26 +123,6 @@ final class TestSuiteSorter
 
             $this->sort($suite, $order, $resolveDependencies, $orderDefects);
         }
-
-        if ($isRootTestSuite) {
-            $this->executionOrder = $this->calculateTestExecutionOrder($suite);
-        }
-    }
-
-    /**
-     * @return array<string>
-     */
-    public function getOriginalExecutionOrder(): array
-    {
-        return $this->originalExecutionOrder;
-    }
-
-    /**
-     * @return array<string>
-     */
-    public function getExecutionOrder(): array
-    {
-        return $this->executionOrder;
     }
 
     private function sort(TestSuite $suite, int $order, bool $resolveDependencies, int $orderDefects): void
@@ -178,8 +148,6 @@ final class TestSuiteSorter
         if ($resolveDependencies && !($suite instanceof DataProviderTestSuite)) {
             $tests = $suite->tests();
 
-            /** @noinspection PhpParamsInspection */
-            /** @phpstan-ignore argument.type */
             $suite->setTests($this->resolveDependencies($tests));
         }
     }
@@ -189,36 +157,22 @@ final class TestSuiteSorter
         $max = 0;
 
         foreach ($suite->tests() as $test) {
-            if (!$test instanceof Reorderable) {
-                continue;
-            }
+            assert($test instanceof Reorderable);
 
-            $sortId = $test->sortId();
-
-            if (!isset($this->defectSortOrder[$sortId])) {
-                $this->defectSortOrder[$sortId] = $this->cache->status(ResultCacheId::fromReorderable($test))->asInt();
-                $max                            = max($max, $this->defectSortOrder[$sortId]);
+            if (!isset($this->defectSortOrder[$test->sortId()])) {
+                $this->defectSortOrder[$test->sortId()] = $this->cache->status($test->sortId())->asInt();
+                $max                                    = max($max, $this->defectSortOrder[$test->sortId()]);
             }
         }
 
         $this->defectSortOrder[$suite->sortId()] = $max;
     }
 
-    /**
-     * @param list<Test> $tests
-     *
-     * @return list<Test>
-     */
     private function reverse(array $tests): array
     {
         return array_reverse($tests);
     }
 
-    /**
-     * @param list<Test> $tests
-     *
-     * @return list<Test>
-     */
     private function randomize(array $tests): array
     {
         shuffle($tests);
@@ -226,11 +180,6 @@ final class TestSuiteSorter
         return $tests;
     }
 
-    /**
-     * @param list<Test> $tests
-     *
-     * @return list<Test>
-     */
     private function sortDefectsFirst(array $tests): array
     {
         usort(
@@ -241,11 +190,6 @@ final class TestSuiteSorter
         return $tests;
     }
 
-    /**
-     * @param list<Test> $tests
-     *
-     * @return list<Test>
-     */
     private function sortByDuration(array $tests): array
     {
         usort(
@@ -256,11 +200,6 @@ final class TestSuiteSorter
         return $tests;
     }
 
-    /**
-     * @param list<Test> $tests
-     *
-     * @return list<Test>
-     */
     private function sortBySize(array $tests): array
     {
         usort(
@@ -280,9 +219,8 @@ final class TestSuiteSorter
      */
     private function cmpDefectPriorityAndTime(Test $a, Test $b): int
     {
-        if (!($a instanceof Reorderable && $b instanceof Reorderable)) {
-            return 0;
-        }
+        assert($a instanceof Reorderable);
+        assert($b instanceof Reorderable);
 
         $priorityA = $this->defectSortOrder[$a->sortId()] ?? 0;
         $priorityB = $this->defectSortOrder[$b->sortId()] ?? 0;
@@ -305,11 +243,10 @@ final class TestSuiteSorter
      */
     private function cmpDuration(Test $a, Test $b): int
     {
-        if (!($a instanceof Reorderable && $b instanceof Reorderable)) {
-            return 0;
-        }
+        assert($a instanceof Reorderable);
+        assert($b instanceof Reorderable);
 
-        return $this->cache->time(ResultCacheId::fromReorderable($a)) <=> $this->cache->time(ResultCacheId::fromReorderable($b));
+        return $this->cache->time($a->sortId()) <=> $this->cache->time($b->sortId());
     }
 
     /**
@@ -338,9 +275,9 @@ final class TestSuiteSorter
      * 3. If the test has dependencies but none left to do: mark done, start again from the top
      * 4. When we reach the end add any leftover tests to the end. These will be marked 'skipped' during execution.
      *
-     * @param array<DataProviderTestSuite|TestCase> $tests
+     * @psalm-param array<DataProviderTestSuite|TestCase> $tests
      *
-     * @return array<DataProviderTestSuite|TestCase>
+     * @psalm-return array<DataProviderTestSuite|TestCase>
      */
     private function resolveDependencies(array $tests): array
     {
@@ -359,25 +296,5 @@ final class TestSuiteSorter
         } while (!empty($tests) && ($i < count($tests)));
 
         return array_merge($newTestOrder, $tests);
-    }
-
-    /**
-     * @return array<string>
-     */
-    private function calculateTestExecutionOrder(Test $suite): array
-    {
-        $tests = [];
-
-        if ($suite instanceof TestSuite) {
-            foreach ($suite->tests() as $test) {
-                if (!$test instanceof TestSuite && $test instanceof Reorderable) {
-                    $tests[] = $test->sortId();
-                } else {
-                    $tests = array_merge($tests, $this->calculateTestExecutionOrder($test));
-                }
-            }
-        }
-
-        return $tests;
     }
 }

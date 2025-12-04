@@ -16,9 +16,12 @@
                     <a href="<?= base_url('/jadwal'); ?>" class="btn btn-outline-light px-4 py-2 fw-semibold">Lihat Jadwal</a>
                 </div>
             </div>
+            <?php if($isAdmin): ?>
             <div class="col-lg-6 text-center">
-                <img src="<?= base_url('img/studyjam.png'); ?>" alt="Kegiatan Study Jam" class="img-fluid rounded-4 shadow-lg" style="max-width: 90%;">
+                <img src="<?= base_url('img/studyjam.png'); ?>" alt="Kegiatan Study Jam" class="img-fluid rounded-4 shadow-lg d-flex" style="max-width: 90%;">
+                <a href="#" class="btn btn-outline-light mt-4 px-4">Ganti Gambar</a>
             </div>
+            <?php endif; ?>
         </div>
     </div>
 </div>
@@ -117,6 +120,14 @@
             <?php endforeach; ?>
         <?php endif; ?>
     </div>
+<?php if ($isAdmin): ?>
+    <!-- Edit kelas (admin) --> 
+    <div class="fs-1 fw-bold d-flex justify-content-end">
+        Edit
+        <a href="#" class="fs-1 bi bi-pencil-square justify-content-end align-items-end btn">
+        </a>
+    </div>
+<?php endif; ?>
 </div>
 
 <?= $this->endSection(); ?>

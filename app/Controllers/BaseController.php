@@ -27,6 +27,7 @@ abstract class BaseController extends Controller
      * @var CLIRequest|IncomingRequest
      */
     protected $request;
+    protected $isAdmin;
 
     /**
      * An array of helpers to be loaded automatically upon
@@ -50,6 +51,10 @@ abstract class BaseController extends Controller
     {
         // Do Not Edit This Line
         parent::initController($request, $response, $logger);
+        $this->isAdmin = service('authentication')->check() ? in_groups('admin') : false;
+
+        $renderer = \Config\Services::renderer();
+        $renderer->setVar('isAdmin', $this->isAdmin);
 
         // Preload any models, libraries, etc, here.
 
