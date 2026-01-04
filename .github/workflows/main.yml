@@ -1,0 +1,52 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  testing:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Composer
+        uses: php-actions/composer@v6
+        with:
+          php-version: '8.2'
+          composer-options: '--no-interaction --prefer-dist --optimize-autoloader'
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+      - name: Run tests
+        run: vendor/bin/phpunit --configuration phpunit.xml
+
+  deployment:
+    needs: testing
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code 
+        uses: actions/checkout@v2
+      - name: SSH Setup
+        uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.VPS_SSH_KEY }}
+      - name: Deploy to VPS
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{secrets.VPS_USER}}@${{secrets.VPS_HOST}} << 'EOF'
+            cd /home/simaja/ | exit 1
+            
+            if [ ! -d ".git" ]; then
+              git clone https://github.com/MuhammadHadistRifannan/SimajaProtic
+            else
+              git pull origin main
+            fi
+            
+            docker rm -f simaja-protic || true
+            docker build -t simaja-protic .
+            docker run -d -p 8282:8282 --name simaja-protic simaja-protic
+
+            EOF
+
