@@ -16,7 +16,8 @@ jobs:
         uses: php-actions/composer@v6
         with:
           php-version: '8.2'
-          composer-options: '--no-interaction --prefer-dist --optimize-autoloader'
+          extensions: intl, mbstring, mysqli, pdo, pdo_mysql
+          coverage: none
 
       - name: Update Composer 
         run: composer update --no-interaction --prefer-dist --optimize-autoloader

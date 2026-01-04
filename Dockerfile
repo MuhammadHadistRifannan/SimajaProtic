@@ -20,6 +20,6 @@ COPY . .
 RUN chown -R www-data:www-data /var/www/html \
  && chmod -R 775 writable
 
-EXPOSE 80
+EXPOSE 8282
 
 CMD ["apache2-foreground"]
