@@ -16,12 +16,12 @@
                     <a href="<?= base_url('/jadwal'); ?>" class="btn btn-outline-light px-4 py-2 fw-semibold">Lihat Jadwal</a>
                 </div>
             </div>
-            <?php if($isAdmin): ?>
             <div class="col-lg-6 text-center">
                 <img src="<?= base_url('img/studyjam.png'); ?>" alt="Kegiatan Study Jam" class="img-fluid rounded-4 shadow-lg d-flex" style="max-width: 90%;">
+                <?php if($isAdmin): ?>
                 <a href="#" class="btn btn-outline-light mt-4 px-4">Ganti Gambar</a>
+                <?php endif; ?>
             </div>
-            <?php endif; ?>
         </div>
     </div>
 </div>
